@@ -24,11 +24,20 @@ const countModifier = (count = 0, action) => {
 // createStore는 reducer 요구
 const countStore = createStore(countModifier);
 
-// countModifier(currentState = 0, {type: "ADD"})
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "ADD" }); // 3, action
-countStore.dispatch({ type: "ADD" });
-countStore.dispatch({ type: "MINUS" });
+const onChange = () => {
+  number.innerText = countStore.getState();
+};
 
-console.log(countStore.getState());
+countStore.subscribe(onChange);
+
+// countModifier(currentState = 0, {type: "ADD"})
+const handleAdd = () => {
+  countStore.dispatch({ type: "ADD" });
+};
+
+const handleMinus = () => {
+  countStore.dispatch({ type: "MINUS" });
+};
+
+add.addEventListener("click", handleAdd);
+minus.addEventListener("click", handleMinus);
