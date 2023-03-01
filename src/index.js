@@ -8,13 +8,27 @@ const number = document.querySelector("span");
 
 // data를 modify하는 function, 오직 얘만 데이터 수정 가능
 // state initializing
-const countModifier = (count = 0) => {
-  console.log(count);
-  return count; // return하는 건 너의 어플리케이션의 data가 됨
+const countModifier = (count = 0, action) => {
+  console.log(count, action);
+  if (action.type === "ADD") {
+    return count + 1;
+  } else if (action.type === "MINUS") {
+    return count - 1;
+  } else {
+    return count;
+  }
+  // return하는 건 너의 어플리케이션의 data가 됨
 };
 
 // store는 data를 저장하는 곳
 // createStore는 reducer 요구
 const countStore = createStore(countModifier);
 
-console.log(countStore.getState()); // 0
+// countModifier(currentState = 0, {type: "ADD"})
+countStore.dispatch({ type: "ADD" });
+countStore.dispatch({ type: "ADD" });
+countStore.dispatch({ type: "ADD" }); // 3, action
+countStore.dispatch({ type: "ADD" });
+countStore.dispatch({ type: "MINUS" });
+
+console.log(countStore.getState());
