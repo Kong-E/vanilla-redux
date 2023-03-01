@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { createStore } from "redux";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const add = document.getElementById("add");
+const minus = document.getElementById("minus");
+const number = document.querySelector("span");
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// state는 바뀌는 코드를 말함
+
+// data를 modify하는 function, 오직 얘만 데이터 수정 가능
+// state initializing
+const countModifier = (count = 0) => {
+  console.log(count);
+  return count; // return하는 건 너의 어플리케이션의 data가 됨
+};
+
+// store는 data를 저장하는 곳
+// createStore는 reducer 요구
+const countStore = createStore(countModifier);
+
+console.log(countStore.getState()); // 0
