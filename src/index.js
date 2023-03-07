@@ -7,26 +7,13 @@ const ul = document.querySelector("ul");
 const ADD_TODO = "ADD_TODO";
 const DELETE_TODO = "DELETE_TODO";
 
-const addToDo = (text) => {
-  return {
-    type: ADD_TODO,
-    text,
-  };
-};
-
-const deleteToDo = (id) => {
-  return {
-    type: DELETE_TODO,
-    id,
-  };
-};
-
+// mutate 금지, 새로운 arr 만들기
 const reducer = (state = [], action) => {
   switch (action.type) {
     case ADD_TODO:
       return [...state, { text: action.text, id: action.id }];
     case DELETE_TODO:
-      return [];
+      return state.filter((toDo) => toDo.id !== action.id);
     default:
       return state;
   }
@@ -37,12 +24,18 @@ const store = createStore(reducer);
 store.subscribe(() => console.log(store.getState()));
 
 const dispatchAddToDo = (text) => {
-  store.dispatch(addToDo(text));
+  store.dispatch({
+    type: ADD_TODO,
+    text,
+  });
 };
 
 const dispatchDeleteToDo = (e) => {
-  const id = e.target.parentNode.id;
-  store.dispatch(deleteToDo(id));
+  const id = parseInt(e.target.parentNode.id);
+  store.dispatch({
+    type: DELETE_TODO,
+    id,
+  });
 };
 
 const paintToDos = () => {
