@@ -1,65 +1,14 @@
-import { createStore } from "redux";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./components/App";
+import { Provider } from "react-redux";
+import store from "./store";
 
-const form = document.querySelector("form");
-const input = document.querySelector("input");
-const ul = document.querySelector("ul");
-
-const ADD_TODO = "ADD_TODO";
-const DELETE_TODO = "DELETE_TODO";
-
-// mutate 금지, 새로운 arr 만들기
-const reducer = (state = [], action) => {
-  switch (action.type) {
-    case ADD_TODO:
-      return [...state, { text: action.text, id: action.id }];
-    case DELETE_TODO:
-      return state.filter((toDo) => toDo.id !== action.id);
-    default:
-      return state;
-  }
-};
-
-const store = createStore(reducer);
-
-store.subscribe(() => console.log(store.getState()));
-
-const dispatchAddToDo = (text) => {
-  store.dispatch({
-    type: ADD_TODO,
-    text,
-  });
-};
-
-const dispatchDeleteToDo = (e) => {
-  const id = parseInt(e.target.parentNode.id);
-  store.dispatch({
-    type: DELETE_TODO,
-    id,
-  });
-};
-
-const paintToDos = () => {
-  const toDos = store.getState();
-  ul.innerHTML = "";
-  toDos.forEach((toDo) => {
-    const li = document.createElement("li");
-    const btn = document.createElement("button");
-    btn.innerText = "DEL";
-    btn.addEventListener("click", dispatchDeleteToDo);
-    li.id = toDo.id;
-    li.innerText = toDo.text;
-    li.appendChild(btn);
-    ul.appendChild(li);
-  });
-};
-
-store.subscribe(paintToDos);
-
-const onSubmit = (e) => {
-  e.preventDefault();
-  const toDo = input.value;
-  input.value = "";
-  dispatchAddToDo(toDo);
-};
-
-form.addEventListener("submit", onSubmit);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  //  <React.StrictMode>
+  <Provider store={store}>
+    <App />
+  </Provider>
+  //  </React.StrictMode>
+);
