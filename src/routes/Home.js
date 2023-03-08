@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addToDo } from "../store";
+import Todo from "../components/Todo";
 
-const Home = (props) => {
+const Home = () => {
   const [text, setText] = useState("");
+  const toDos = useSelector((state) => state);
+  const dispatch = useDispatch();
   function onChange(e) {
     setText(e.target.value);
   }
   function onSubmit(e) {
     e.preventDefault();
+    dispatch(addToDo(text));
     setText("");
   }
   return (
@@ -17,14 +22,13 @@ const Home = (props) => {
         <input type="text" value={text} onChange={onChange} />
         <button>Add</button>
       </form>
-      <ul></ul>
+      <ul>
+        {toDos.map((toDo) => (
+          <Todo {...toDo} key={toDo.id} />
+        ))}
+      </ul>
     </>
   );
 };
 
-// connect()는 state가 Home으로 보내는 props에 추가될 수 있도록 해줌
-function mapStateToProps(state) {
-  return { toDos: state };
-}
-
-export default connect(mapStateToProps)(Home);
+export default Home;
